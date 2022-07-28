@@ -9,6 +9,14 @@ set (heif_convert_sources
   heif_convert.cc
 )
 
+set (grahams_convert_sources
+  encoder.cc
+  encoder.h
+  encoder_y4m.cc
+  encoder_y4m.h
+  grahams_convert.cc
+)
+
 set (additional_link_directories)
 set (additional_libraries)
 set (additional_includes)
@@ -45,6 +53,11 @@ set (heif_convert_sources
   encoder_jpeg.cc
   encoder_jpeg.h
 )
+set (grahams_convert_sources
+  ${grahams_convert_sources}
+  encoder_jpeg.cc
+  encoder_jpeg.h
+)
 set (additional_libraries
   ${additional_libraries}
   ${JPEG_LIBRARIES}
@@ -63,6 +76,11 @@ if(UNIX OR MINGW)
     add_definitions(-DHAVE_LIBPNG=1)
     set (heif_convert_sources
       ${heif_convert_sources}
+      encoder_png.cc
+      encoder_png.h
+    )
+    set (grahams_convert_sources
+      ${grahams_convert_sources}
       encoder_png.cc
       encoder_png.h
     )
@@ -108,6 +126,13 @@ target_link_libraries (heif-convert heif ${additional_libraries})
 target_include_directories(heif-convert PRIVATE ${additional_includes})
 install(TARGETS heif-convert RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES heif-convert.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
+
+add_executable (grahams-convert ${grahams_convert_sources} ${getopt_sources})
+target_link_directories (grahams-convert PRIVATE ${additional_link_directories})
+target_link_libraries (grahams-convert heif ${additional_libraries})
+target_include_directories(grahams-convert PRIVATE ${additional_includes})
+install(TARGETS grahams-convert RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES grahams-convert.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
 
 add_executable (heif-info ${heif_info_sources} ${getopt_sources})
 target_link_libraries (heif-info heif)

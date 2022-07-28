@@ -2,6 +2,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 examples = \
   heif-convert \
+  grahams-convert \
   heif-enc \
   heif-info
 
@@ -18,6 +19,13 @@ heif_convert_LDADD = ../libheif/libheif.la
 heif_convert_SOURCES = encoder.cc encoder.h heif_convert.cc encoder_y4m.cc encoder_y4m.h
 dist_man_MANS += heif-convert.1
 
+grahams_convert_DEPENDENCIES = ../libheif/libheif.la
+grahams_convert_CXXFLAGS = -I$(top_srcdir) -I$(top_builddir)/.
+grahams_convert_LDFLAGS =
+grahams_convert_LDADD = ../libheif/libheif.la
+grahams_convert_SOURCES = encoder.cc encoder.h grahams_convert.cc encoder_y4m.cc encoder_y4m.h
+dist_man_MANS += grahams-convert.1
+
 
 if HAVE_LIBPNG
 examples += heif-thumbnailer
@@ -33,12 +41,20 @@ if HAVE_LIBJPEG
 heif_convert_CXXFLAGS += $(libjpeg_CFLAGS)
 heif_convert_LDADD += $(libjpeg_LIBS)
 heif_convert_SOURCES += encoder_jpeg.cc encoder_jpeg.h
+
+grahams_convert_CXXFLAGS += $(libjpeg_CFLAGS)
+grahams_convert_LDADD += $(libjpeg_LIBS)
+grahams_convert_SOURCES += encoder_jpeg.cc encoder_jpeg.h
 endif
 
 if HAVE_LIBPNG
 heif_convert_CXXFLAGS += $(libpng_CFLAGS)
 heif_convert_LDADD += $(libpng_LIBS)
 heif_convert_SOURCES += encoder_png.cc encoder_png.h
+
+grahams_convert_CXXFLAGS += $(libpng_CFLAGS)
+grahams_convert_LDADD += $(libpng_LIBS)
+grahams_convert_SOURCES += encoder_png.cc encoder_png.h
 endif
 
 heif_info_DEPENDENCIES = ../libheif/libheif.la
